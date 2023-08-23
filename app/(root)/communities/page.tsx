@@ -1,12 +1,16 @@
 import CommunityCard from "@/components/cards/CommunityCard";
-import UserCard from "@/components/cards/UserCard";
+import SearchBar from "@/components/shared/SearchBar";
 import { fetchCommunities } from "@/lib/actions/community.actions";
-import { fetchUser, fetchUsers } from "@/lib/actions/user.actions";
+import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 
-const Page = async () => {
+async function Page({
+    searchParams,
+  }: {
+    searchParams: { [key: string]: string | undefined };
+  }) {
+
     const user  = await currentUser();
     if(!user) return null;
 
@@ -15,7 +19,7 @@ const Page = async () => {
 
     // fetch communities
     const result = await fetchCommunities({
-        searchString: '',
+        searchString: searchParams.q,
         pageNumber: 1,
         pageSize: 25
     })
@@ -23,9 +27,12 @@ const Page = async () => {
     return (
         <section>
             <h1 className="head-text mb-10">Communities</h1>
-            {/* SEARCH BAR */}
+            
+            <div className="mt-5">
+                <SearchBar routeType="communities"/>
+            </div>
 
-            <div className="mt-14 flex flex-col gap-9">
+            <div className="mt-9 flex flex-wrap gap-5">
                 {result.communities.length === 0 ? (
                     <p className="no-result">No Users</p>
                 ) : (

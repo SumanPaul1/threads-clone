@@ -11,10 +11,11 @@ const Page = async ({params}: {params: {id: string}}) => {
     const user  = await currentUser();
     if(!user) return null;
     
-    const userInfo = await fetchUser(params.id);
+    let userInfo = await fetchUser(params.id);
     if(!userInfo?.onboarded) redirect('/onboarding');
 
     return(
+
         <section>
             <ProfileHeader
                 accountId={userInfo.id}
@@ -47,15 +48,32 @@ const Page = async ({params}: {params: {id: string}}) => {
                             </TabsTrigger>
                         ))}
                     </TabsList>
-                    {profileTabs.map((tab) => (
+                    <TabsContent value="threads">
+                        {/* @ts-ignore */}
+                        <ThreadsTab
+                            currentUserId={user.id}
+                            accountId={userInfo.id}
+                            accountType="User"
+                        />
+                    </TabsContent>
+                    <TabsContent value="replies">
+                        {/* @ts-ignore */}
+                        
+                    </TabsContent>
+                    <TabsContent value="edit">
+                        {/* @ts-ignore */}
+                        
+                    </TabsContent>
+                    {/* {profileTabs.map((tab) => (
                         <TabsContent key={`content-${tab.label}`} value={tab.value}>
-                            <ThreadsTab
+                            {/* @ts-ignore */}
+                            {/* <ThreadsTab
                                 currentUserId={user.id}
                                 accountId={userInfo.id}
                                 accountType="User"
                             />
                         </TabsContent>
-                    ))}
+                    ))}  */}
                 </Tabs>
             </div>
         </section>
