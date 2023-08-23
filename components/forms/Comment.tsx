@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { usePathname, useRouter } from 'next/navigation';
 import { ThreadValidation, CommentValidation } from "@/lib/validations/thread";
-import { addToCommentToThread, createThread } from "@/lib/actions/thread.actions";
+import { addCommentToThread, createThread } from "@/lib/actions/thread.actions";
 import Image from "next/image";
 
 interface Props{
@@ -28,7 +28,7 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
     });
 
     const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
-        await addToCommentToThread(threadId, values.thread, JSON.parse(currentUserId), pathname);
+        await addCommentToThread(threadId, values.thread, JSON.parse(currentUserId), pathname);
 
         form.reset();
     } 
